@@ -56,29 +56,10 @@ copy_if_missing "$REPO_DIR/templates/AGENTS.md" "$HOME/AGENTS.md"
 copy_if_missing "$REPO_DIR/templates/CLAUDE.md" "$HOME/CLAUDE.md"
 copy_if_missing "$REPO_DIR/templates/GEMINI.md" "$HOME/GEMINI.md"
 
-if ! grep -q "Agent Brain Runtime" "$SHELL_RC" 2>/dev/null; then
-  cat >> "$SHELL_RC" <<EOF
-
-# >>> Agent Brain Runtime >>>
-export BRAIN_ROOT="$BRAIN_ROOT"
-export BRAIN_VAULT="$BRAIN_VAULT"
-export BRAIN_BOOT="\$BRAIN_VAULT/AGENTS.md"
-export BRAIN_WORKFLOW="\$BRAIN_VAULT/_meta/workflow.md"
-export BRAIN_SKILLS_DIR="\$BRAIN_VAULT/skills"
-export OBSIDIAN_VAULT_PATH="\${OBSIDIAN_VAULT_PATH:-\$BRAIN_VAULT}"
-export OBSIDIAN_WIKI_REPO="\${OBSIDIAN_WIKI_REPO:-\$BRAIN_ROOT}"
-export OBSIDIAN_LINK_FORMAT="\${OBSIDIAN_LINK_FORMAT:-wikilink}"
-case ":\$PATH:" in
-  *":$PREFIX:"*) ;;
-  *) export PATH="$PREFIX:\$PATH" ;;
-esac
-alias codex='brain codex'
-alias opencode='brain opencode'
-alias claude='brain claude'
-alias gemini='brain gemini'
-# <<< Agent Brain Runtime <<<
-EOF
-fi
+# Idempotently (re)write the shell-rc block via the shim itself — single source of
+# truth, and safe to re-run after changing BRAIN_VAULT (no stale exports left behind).
+BRAIN_ROOT="$BRAIN_ROOT" BRAIN_VAULT="$BRAIN_VAULT" SHELL_RC="$SHELL_RC" \
+  "$PREFIX/brain" reinit >/dev/null
 
 echo "Agent Brain Runtime installed."
 echo "Brain root:  $BRAIN_ROOT"

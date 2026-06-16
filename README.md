@@ -216,6 +216,7 @@ brain status       # is the brain active here? vault, session id, staleness
 brain check        # read-only quality gate: validate + dedup (no writes)
 brain doctor       # verify boot files exist
 brain which codex  # show what a command resolves to (and if brain wraps it)
+brain reinit       # idempotently rewrite the shell-rc block with current paths
 brain env          # print brain environment
 brain codex        # run Codex with brain env
 brain opencode     # run OpenCode with brain env

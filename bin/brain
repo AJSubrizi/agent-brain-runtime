@@ -39,6 +39,7 @@ Usage:
   brain check             read-only quality gate: validate + dedup (no writes)
   brain doctor            verify boot files exist
   brain which <cmd>       show what <cmd> resolves to (and if brain wraps it)
+  brain reinit            idempotently (re)write the shell-rc block with current paths
   brain env               print the brain environment
 
 Examples:
@@ -77,6 +78,51 @@ status() {
     printf 'hash:     %s\n' "$now"
   fi
   doctor
+}
+
+reinit() {
+  # Idempotently rewrite the marked shell-rc block: strip any old one, then append a
+  # fresh block with the current paths. Re-running after changing BRAIN_VAULT no longer
+  # leaves stale exports behind. Used by install.sh and runnable on its own.
+  local prefix="$SELF_DIR" rc default_rc
+  case "${SHELL:-}" in
+    *bash) default_rc="$HOME/.bashrc" ;;
+    *)     default_rc="$HOME/.zshrc" ;;
+  esac
+  rc="${SHELL_RC:-$default_rc}"
+
+  if [[ -f "$rc" ]] && grep -q "Agent Brain Runtime" "$rc"; then
+    local tmp; tmp="$(mktemp)"
+    awk '
+      /# >>> Agent Brain Runtime >>>/ { skip=1 }
+      skip && /# <<< Agent Brain Runtime <<</ { skip=0; next }
+      !skip { print }
+    ' "$rc" > "$tmp" && mv "$tmp" "$rc"
+  fi
+
+  cat >> "$rc" <<EOF
+
+# >>> Agent Brain Runtime >>>
+export BRAIN_ROOT="$BRAIN_ROOT"
+export BRAIN_VAULT="$BRAIN_VAULT"
+export BRAIN_BOOT="\$BRAIN_VAULT/AGENTS.md"
+export BRAIN_WORKFLOW="\$BRAIN_VAULT/_meta/workflow.md"
+export BRAIN_SKILLS_DIR="\$BRAIN_VAULT/skills"
+export OBSIDIAN_VAULT_PATH="\${OBSIDIAN_VAULT_PATH:-\$BRAIN_VAULT}"
+export OBSIDIAN_WIKI_REPO="\${OBSIDIAN_WIKI_REPO:-\$BRAIN_ROOT}"
+export OBSIDIAN_LINK_FORMAT="\${OBSIDIAN_LINK_FORMAT:-wikilink}"
+case ":\$PATH:" in
+  *":$prefix:"*) ;;
+  *) export PATH="$prefix:\$PATH" ;;
+esac
+alias codex='brain codex'
+alias opencode='brain opencode'
+alias claude='brain claude'
+alias gemini='brain gemini'
+# <<< Agent Brain Runtime <<<
+EOF
+  printf 'brain: rewrote Agent Brain Runtime block in %s\n' "$rc"
+  printf 'brain: open a new terminal (or source it) to apply.\n'
 }
 
 check() {
@@ -132,6 +178,10 @@ case "${1:-}" in
   check)
     check
     exit $?
+    ;;
+  reinit)
+    reinit
+    exit 0
     ;;
   doctor)
     doctor

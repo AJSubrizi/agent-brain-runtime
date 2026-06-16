@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- `brain reinit`: idempotently rewrites the marked shell-rc block with current paths
+  (strip-then-append), so re-running install or changing `BRAIN_VAULT` no longer leaves
+  stale exports behind. `install.sh` now delegates the rc block to `brain reinit` as the
+  single source of truth.
 - `brain check`: read-only quality gate that runs `validate.py` (gating) plus
   `dedup.py` (informational) without writing to the vault. Made the standard last
   step of the distillation phase in `workflow.md`; `brain status` is now the first
