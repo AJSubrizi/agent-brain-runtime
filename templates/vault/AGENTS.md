@@ -28,6 +28,21 @@ procedure from the skills directory. Don't hardcode skill paths — resolve them
 6. Periodically run `python3 _meta/dedup.py` and merge or cross-link any flagged
    duplicate pairs (the detector only suggests; you decide and merge).
 
+## Skill scorecards
+
+Skills under `$BRAIN_SKILLS_DIR` carry a scorecard in their frontmatter — this vault is a
+*rated skills library*, not just notes:
+
+```yaml
+uses: 0          # bumped by `brain skill use <name>` when you apply it
+score: 0.0       # running average quality vote (1–5)
+votes: 0
+last_used: '-'
+```
+
+After applying a skill, run `brain skill use <name>`; vote on quality with
+`brain skill rate <name> <1-5> [note]`. `brain skill list` ranks the library by value.
+
 ## Categories
 
 - `concepts/` — mental models and principles.

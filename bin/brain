@@ -37,6 +37,7 @@ Usage:
   brain <cli> [args...]   run an agent CLI with the brain environment loaded
   brain status            is the brain active here? vault, session, staleness
   brain check             read-only quality gate: validate + dedup (no writes)
+  brain skill <cmd>       skills library scorecards: list | use | rate | show
   brain doctor            verify boot files exist
   brain which <cmd>       show what <cmd> resolves to (and if brain wraps it)
   brain reinit            idempotently (re)write the shell-rc block with current paths
@@ -178,6 +179,19 @@ case "${1:-}" in
   check)
     check
     exit $?
+    ;;
+  skill)
+    shift
+    s="$BRAIN_VAULT/_meta/skill.py"
+    if [[ ! -f "$s" ]]; then
+      printf 'brain: skill engine not found at %s\n' "$s" >&2
+      exit 2
+    fi
+    if ! command -v python3 >/dev/null 2>&1; then
+      printf 'brain: python3 not found; cannot run skill\n' >&2
+      exit 2
+    fi
+    BRAIN_SKILLS_DIR="$BRAIN_SKILLS_DIR" exec python3 "$s" "$@"
     ;;
   reinit)
     reinit

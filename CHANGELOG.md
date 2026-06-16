@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+- **Rated skills library** — the differentiator from opaque memory stores. Skills are
+  Markdown procedures with a frontmatter scorecard (`uses`, `score` 1–5, `votes`,
+  `last_used`). New `brain skill list | use | rate | show` (engine: `_meta/skill.py`)
+  lets agents record use and anyone vote on quality; the library ranks itself, with an
+  append-only `skills/_ratings.log` for provenance. Ships an example skill and documents
+  the scorecard in the vault manual and workflow.
+
 - README: added a **Token Cost** section with a measured per-session breakdown
   (~5–7k tokens on a 56-page vault) and how it scales.
 

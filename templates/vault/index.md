@@ -14,6 +14,8 @@ title: Wiki Index
 
 ## Skills
 
+- [[distill-after-work]] — rated skill: distill learnings into atomic notes after work ( #skills #workflow)
+
 ## Projects
 
 ## Entities

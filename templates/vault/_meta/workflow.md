@@ -12,8 +12,10 @@ Read the brain before work. Distill into the brain after work.
 ## Phase 1 — During Work
 
 1. Apply the loaded notes.
-2. Capture non-obvious discoveries.
-3. Cite pages as `[[page-name]]`.
+2. When you apply a skill, record it: `brain skill use <name>` (and
+   `brain skill rate <name> <1-5>` if you can judge how well it worked).
+3. Capture non-obvious discoveries.
+4. Cite pages as `[[page-name]]`.
 
 ## Phase 2 — Distillation
 

@@ -16,6 +16,12 @@ Instead of starting every session from zero, your agents load a shared **Obsidia
 back into it after meaningful work. No database, no cloud service, no lock-in — just
 portable files and shell scripts.
 
+It is also a **rated skills library**: skills are human-readable Markdown procedures that
+carry a scorecard (usage count + a 1–5 quality score). Agents record each use, you (or
+the agent) vote on quality, and the library ranks itself — so proven skills rise to the
+top. Unlike opaque vector-store memory, every skill is readable, editable in Obsidian,
+and accountable for how well it actually works.
+
 It pairs especially well with [RTK](https://github.com/rtk-ai/rtk): RTK compresses
 command output to save tokens in the short term; Agent Brain Runtime preserves
 project knowledge across sessions for the long term.
@@ -28,6 +34,7 @@ project knowledge across sessions for the long term.
 - [Install](#install)
 - [Quick start](#quick-start)
 - [How it works](#how-it-works)
+- [Skills library (rated)](#skills-library-rated)
 - [Token cost](#token-cost)
 - [FAQ](#faq)
 
@@ -193,6 +200,32 @@ The wrapper exports:
 
 It does not intercept normal developer commands like `git`, `npm`, or `python`.
 Only agentic CLIs should run through the brain.
+
+## Skills Library (rated)
+
+This is what sets Agent Brain Runtime apart from opaque memory stores: skills are
+**Markdown procedures with a scorecard**, so the vault is a *library of proven abilities*,
+not just a pile of notes. Each skill carries four fields in its frontmatter:
+
+```yaml
+uses: 12          # times the skill was applied
+score: 4.6        # running average quality vote (1–5)
+votes: 5          # number of quality votes
+last_used: 2026-06-16
+```
+
+Both the agent and you keep it honest:
+
+```bash
+brain skill list                      # the library, ranked by score then uses
+brain skill use   distill-after-work  # agent records a use (+1, sets last_used)
+brain skill rate  distill-after-work 5 "saved a full re-derive"   # quality vote (1–5)
+brain skill show  distill-after-work  # scorecard + recent rating history
+```
+
+Every change is also appended to `skills/_ratings.log` for provenance. The result is a
+self-improving library: skills that repeatedly work rise to the top, weak ones become
+visible, and the whole thing stays human-readable and editable in Obsidian.
 
 ## Token Cost
 
