@@ -3,8 +3,8 @@ set -euo pipefail
 
 REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PREFIX="${PREFIX:-$HOME/.local/bin}"
-BRAIN_HOME="${BRAIN_HOME:-${SYNAPSE_HOME:-$HOME/Synapse}}"
-BRAIN_ROOT="${BRAIN_ROOT:-$BRAIN_HOME}"
+# Canonical home: SYNAPSE_HOME. BRAIN_ROOT/BRAIN_HOME kept as legacy fallbacks.
+BRAIN_ROOT="${BRAIN_ROOT:-${SYNAPSE_HOME:-${BRAIN_HOME:-$HOME/Synapse}}}"
 BRAIN_VAULT="${BRAIN_VAULT:-$BRAIN_ROOT/vault}"
 case "${SHELL:-}" in
   *bash) DEFAULT_RC="$HOME/.bashrc" ;;

@@ -49,7 +49,7 @@ fi
 cat > "$PREFIX/$NAME" <<EOF
 #!/usr/bin/env bash
 # Synapse wrapper — skip second pass if env already loaded.
-if [[ "\${BRAIN_ACTIVE:-0}" == "1" ]]; then
+if [[ "\${BRAIN_LOADED:-0}" == "1" ]]; then
   exec "$REAL_PATH" "\$@"
 fi
 if command -v "$PREFIX/synapse" >/dev/null 2>&1; then
