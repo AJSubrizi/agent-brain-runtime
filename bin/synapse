@@ -220,6 +220,7 @@ case "${1:-}" in
     printf 'BRAIN_SKILLS_DIR=%s\n' "$BRAIN_SKILLS_DIR"
     printf 'BRAIN_SESSION_ID=%s\n' "$BRAIN_SESSION_ID"
     printf 'BRAIN_VAULT_HASH=%s\n' "$BRAIN_VAULT_HASH"
+    printf 'BRAIN_LOADED=%s\n' "${BRAIN_LOADED:-0}"
     printf 'OBSIDIAN_VAULT_PATH=%s\n' "$OBSIDIAN_VAULT_PATH"
     printf 'OBSIDIAN_WIKI_REPO=%s\n' "$OBSIDIAN_WIKI_REPO"
     printf 'OBSIDIAN_LINK_FORMAT=%s\n' "$OBSIDIAN_LINK_FORMAT"
@@ -235,11 +236,10 @@ if ! command -v -- "$cmd" >/dev/null 2>&1; then
   exit 127
 fi
 
-if [[ "${BRAIN_ACTIVE:-0}" != "1" && "${BRAIN_QUIET:-0}" != "1" ]]; then
+if [[ "${BRAIN_LOADED:-0}" != "1" && "${BRAIN_QUIET:-0}" != "1" ]]; then
   printf 'synapse[vault]: %s (session: %s)\n' "$BRAIN_VAULT" "$BRAIN_SESSION_ID" >&2
 fi
 
-export BRAIN_ACTIVE=1
 export BRAIN_LOADED=1
 
 exec "$cmd" "$@"

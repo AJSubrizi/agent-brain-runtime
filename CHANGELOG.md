@@ -11,6 +11,8 @@
 - Workflow template: Phase 0-short, meaningful work, staleness, subagents, index >80 rule.
 - Hook templates: `session-enforce.sh`, `stop-check.sh`.
 - Docs: [CUSTOM-LAYOUT.md](docs/CUSTOM-LAYOUT.md) for monorepo / external skills (no bundled skill library).
+- **Consolidate** the active-session flag to a single `BRAIN_LOADED` (dropped the redundant `BRAIN_ACTIVE`); now surfaced in `synapse env`.
+- **Align** the home directory variable across scripts: canonical `SYNAPSE_HOME`, internal `BRAIN_ROOT`, with `BRAIN_HOME` kept as a legacy fallback.
 
 ## 0.1.1
 

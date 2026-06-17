@@ -2,7 +2,8 @@
 set -euo pipefail
 
 PREFIX="${PREFIX:-$HOME/.local/bin}"
-BRAIN_HOME="${BRAIN_HOME:-${SYNAPSE_HOME:-$HOME/Synapse}}"
+# Canonical home: SYNAPSE_HOME. BRAIN_ROOT/BRAIN_HOME kept as legacy fallbacks.
+BRAIN_ROOT="${BRAIN_ROOT:-${SYNAPSE_HOME:-${BRAIN_HOME:-$HOME/Synapse}}}"
 case "${SHELL:-}" in
   *bash) DEFAULT_RC="$HOME/.bashrc" ;;
   *)     DEFAULT_RC="$HOME/.zshrc" ;;
@@ -49,8 +50,8 @@ else
 fi
 
 if [ "$DELETE_VAULT" = "1" ]; then
-  rm -rf "$BRAIN_HOME"
-  echo "Deleted $BRAIN_HOME"
+  rm -rf "$BRAIN_ROOT"
+  echo "Deleted $BRAIN_ROOT"
 else
-  echo "Kept vault at $BRAIN_HOME"
+  echo "Kept vault at $BRAIN_ROOT"
 fi
